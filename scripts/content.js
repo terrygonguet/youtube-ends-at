@@ -19,5 +19,5 @@ setInterval(function () {
 		finishesAt = new Date(Date.now() + remaining * 1000),
 		formatter = new Intl.DateTimeFormat([], { timeStyle: "short", hour12: false })
 
-	finishesAtLabel.innerHTML = `&nbsp;&nbsp;-&nbsp;&nbsp;Ends at ${formatter.format(finishesAt)}`
+	finishesAtLabel.textContent = ` - Ends at ${formatter.format(finishesAt)}`
 }, 1000)
