@@ -1,0 +1,22 @@
+{
+	"extensionName": {
+		"message": "Youtube Ends At",
+		"description": "Name of the extension."
+	},
+
+	"extensionDescription": {
+		"message": "Muestra cuándo terminará un video de Youtube.",
+		"description": "Description of the extension."
+	},
+
+	"endsAt": {
+		"message": "Termina a las $TIME$",
+		"description": "Tells the user when the video will end.",
+		"placeholders": {
+			"time": {
+				"content": "$1",
+				"example": "13:37"
+			}
+		}
+	}
+}
