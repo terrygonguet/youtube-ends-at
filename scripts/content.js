@@ -36,5 +36,5 @@ setInterval(function () {
 			hour12: false,
 		})
 
-	endsAtLabel.textContent = `Ends at ${formatter.format(endsAt)}`
+	endsAtLabel.textContent = chrome.i18n.getMessage("endsAt", formatter.format(endsAt))
 }, 1000)
