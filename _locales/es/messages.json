@@ -18,5 +18,16 @@
 				"example": "13:37"
 			}
 		}
+	},
+
+	"endsIn": {
+		"message": "Termina $TIME$",
+		"description": "Tells the user how long until the video ends.",
+		"placeholders": {
+			"time": {
+				"content": "$1",
+				"example": "in 15 minutes"
+			}
+		}
 	}
 }
