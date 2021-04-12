@@ -38,6 +38,8 @@ function updateLabel() {
 
 	const endsAtLabel = document.querySelector("#endsAtLabel")
 	if (!endsAtLabel) return
+	// sometimes something sets this to "display: none"...
+	endsAtLabel.style.display = null
 
 	const { duration, playbackRate, currentTime } = player,
 		remaining = (duration - currentTime) / playbackRate,
