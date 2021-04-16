@@ -8,6 +8,7 @@ function ensureElementsExist() {
 		if (!timeDisplay) return
 
 		const container = timeDisplay.cloneNode(false)
+		container.classList.remove("ytp-live")
 		container.id = "endsAtContainer"
 		container.style.paddingLeft = 0
 		container.style.cursor = "pointer"
@@ -39,9 +40,18 @@ function updateLabel() {
 	const endsAtLabel = document.querySelector("#endsAtLabel")
 	if (!endsAtLabel) return
 
-	// sometimes something sets this to "display: none"...
 	const endsAtContainer = document.querySelector("#endsAtContainer")
-	endsAtContainer.style.display = null
+	if (endsAtContainer) {
+		// cleanup
+		endsAtContainer.style.display = null
+		endsAtContainer.classList.remove("ytp-live")
+	}
+
+	const liveIndicator = document.querySelector(".ytp-live.ytp-time-display")
+	if (liveIndicator && endsAtContainer) {
+		endsAtContainer.style.display = "none"
+		return
+	}
 
 	const { duration, playbackRate, currentTime } = player,
 		remaining = (duration - currentTime) / playbackRate,
