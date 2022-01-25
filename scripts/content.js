@@ -34,7 +34,8 @@ function ensureElementsExist() {
 }
 
 function updateLabel() {
-	const player = document.querySelector("video")
+	const players = Array.from(document.querySelectorAll("video"))
+	const player = players.find(p => p.duration) // find the first valid video element
 	if (!player) return
 
 	const endsAtLabel = document.querySelector("#endsAtLabel")
@@ -91,6 +92,7 @@ function updateLabel() {
 }
 
 setInterval(function () {
+	if (!location.pathname.startsWith("/watch")) return
 	ensureElementsExist()
 	updateLabel()
 }, 1000)
