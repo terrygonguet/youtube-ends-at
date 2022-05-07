@@ -2,14 +2,14 @@
 let mode = "endsAt"
 
 function ensureElementsExist() {
-	const container = document.querySelector("#endsAtContainer")
+	const container = document.querySelector("#movie_player .endsAtContainer")
 	if (!container) {
-		const timeDisplay = document.querySelector(".ytp-time-display")
+		const timeDisplay = document.querySelector("#movie_player .ytp-time-display")
 		if (!timeDisplay) return
 
 		const container = timeDisplay.cloneNode(false)
 		container.classList.remove("ytp-live")
-		container.id = "endsAtContainer"
+		container.classList.add("endsAtContainer")
 		container.style.paddingLeft = 0
 		container.style.cursor = "pointer"
 
@@ -19,8 +19,7 @@ function ensureElementsExist() {
 		container.appendChild(separator)
 
 		const label = document.createElement("span")
-		label.id = "endsAtLabel"
-		label.classList.add("ytp-time-duration")
+		label.classList.add("endsAtLabel", "ytp-time-duration")
 		container.appendChild(label)
 
 		// toggle mode on click
@@ -34,14 +33,13 @@ function ensureElementsExist() {
 }
 
 function updateLabel() {
-	const players = Array.from(document.querySelectorAll("video"))
-	const player = players.find(p => p.duration) // find the first valid video element
+	const player = document.querySelector("#movie_player video")
 	if (!player) return
 
-	const endsAtLabel = document.querySelector("#endsAtLabel")
+	const endsAtLabel = document.querySelector("#movie_player .endsAtLabel")
 	if (!endsAtLabel) return
 
-	const endsAtContainer = document.querySelector("#endsAtContainer")
+	const endsAtContainer = document.querySelector("#movie_player .endsAtContainer")
 	if (endsAtContainer) {
 		// cleanup
 		endsAtContainer.style.display = null
@@ -65,7 +63,10 @@ function updateLabel() {
 					timeStyle: "short",
 					hour12: false,
 				})
-				endsAtLabel.textContent = chrome.i18n.getMessage("endsAt", formatter.format(new Date(endsAt)))
+				endsAtLabel.textContent = chrome.i18n.getMessage(
+					"endsAt",
+					formatter.format(new Date(endsAt)),
+				)
 			}
 			break
 		case "endsIn":
@@ -85,7 +86,10 @@ function updateLabel() {
 					n = remaining / 60
 				}
 
-				endsAtLabel.textContent = chrome.i18n.getMessage("endsIn", formatter.format(n.toPrecision(2), scale))
+				endsAtLabel.textContent = chrome.i18n.getMessage(
+					"endsIn",
+					formatter.format(n.toPrecision(2), scale),
+				)
 			}
 			break
 	}
