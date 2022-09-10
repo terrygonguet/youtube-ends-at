@@ -1,5 +1,5 @@
 /** @type {"endsAt" | "endsIn"} */
-let mode = "endsAt"
+let mode = localStorage.getItem("yt-ends-at-mode") ?? "endsAt"
 
 function ensureElementsExist() {
 	const container = document.querySelector("#movie_player .endsAtContainer")
@@ -25,6 +25,7 @@ function ensureElementsExist() {
 		// toggle mode on click
 		container.addEventListener("click", () => {
 			mode = mode == "endsAt" ? "endsIn" : "endsAt"
+			localStorage.setItem("yt-ends-at-mode", mode)
 			updateLabel()
 		})
 
