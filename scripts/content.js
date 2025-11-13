@@ -7,29 +7,26 @@ function ensureElementsExist() {
 		const timeDisplay = document.querySelector("#movie_player .ytp-time-display")
 		if (!timeDisplay) return
 
-		const container = timeDisplay.cloneNode(false)
-		container.classList.remove("ytp-live")
-		container.classList.add("endsAtContainer")
-		container.style.paddingLeft = 0
-		container.style.cursor = "pointer"
-
-		const separator = document.createElement("span")
-		separator.textContent = "•"
-		separator.classList.add("ytp-chapter-title-prefix")
-		container.appendChild(separator)
-
-		const label = document.createElement("span")
-		label.classList.add("endsAtLabel", "ytp-time-duration")
-		container.appendChild(label)
+		const container = document.createElement("div")
+		container.innerHTML = `
+			<div class="ytp-time-display notranslate endsAtContainer" style="padding-left: 0">
+				<span class="ytp-time-wrapper ytp-time-wrapper-delhi">
+					<div class="ytp-time-contents">
+						<span class="ytp-time-duration endsAtLabel"></span>
+					</div>
+				</span>
+			</div>`
+		const element = container.firstElementChild
+		console.log(element)
 
 		// toggle mode on click
-		container.addEventListener("click", () => {
+		element.addEventListener("click", () => {
 			mode = mode == "endsAt" ? "endsIn" : "endsAt"
 			localStorage.setItem("yt-ends-at-mode", mode)
 			updateLabel()
 		})
 
-		timeDisplay.parentNode.insertBefore(container, timeDisplay.nextSibling)
+		console.log(timeDisplay.parentNode.insertBefore(element, timeDisplay.nextSibling))
 	}
 }
 
@@ -41,58 +38,43 @@ function updateLabel() {
 	if (!endsAtLabel) return
 
 	const endsAtContainer = document.querySelector("#movie_player .endsAtContainer")
-	if (endsAtContainer) {
-		// cleanup
-		endsAtContainer.style.display = null
-		endsAtContainer.classList.remove("ytp-live")
-	}
-
 	const liveIndicator = document.querySelector(".ytp-live.ytp-time-display")
 	if (liveIndicator && endsAtContainer) {
 		endsAtContainer.style.display = "none"
 		return
+	} else {
+		endsAtContainer.style.display = ""
 	}
 
-	const { duration, playbackRate, currentTime } = player,
-		remaining = (duration - currentTime) / playbackRate,
-		endsAt = Date.now() + remaining * 1000
+	const { duration, playbackRate, currentTime } = player
+	const remaining = (duration - currentTime) / playbackRate
+	const endsAt = Date.now() + remaining * 1000
 
 	switch (mode) {
-		case "endsAt":
-			{
-				const formatter = new Intl.DateTimeFormat([], {
-					timeStyle: "short",
-					hour12: false,
-				})
-				endsAtLabel.textContent = chrome.i18n.getMessage(
-					"endsAt",
-					formatter.format(new Date(endsAt)),
-				)
-			}
+		case "endsAt": {
+			const formatter = new Intl.DateTimeFormat(undefined, { timeStyle: "short" })
+			endsAtLabel.textContent = chrome.i18n.getMessage("endsAt", formatter.format(new Date(endsAt)))
 			break
-		case "endsIn":
-			{
-				const formatter = new Intl.RelativeTimeFormat([], { numeric: "auto" })
+		}
+		case "endsIn": {
+			const formatter = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" })
 
-				let scale = "seconds",
-					n = remaining
-				if (remaining > 24 * 60 * 60) {
-					scale = "days"
-					n = remaining / (24 * 60 * 60)
-				} else if (remaining > 60 * 60) {
-					scale = "hours"
-					n = remaining / (60 * 60)
-				} else if (remaining > 60) {
-					scale = "minutes"
-					n = remaining / 60
-				}
-
-				endsAtLabel.textContent = chrome.i18n.getMessage(
-					"endsIn",
-					formatter.format(n.toPrecision(2), scale),
-				)
+			let scale = "seconds",
+				n = remaining
+			if (remaining > 24 * 60 * 60) {
+				scale = "days"
+				n = remaining / (24 * 60 * 60)
+			} else if (remaining > 60 * 60) {
+				scale = "hours"
+				n = remaining / (60 * 60)
+			} else if (remaining > 60) {
+				scale = "minutes"
+				n = remaining / 60
 			}
+
+			endsAtLabel.textContent = chrome.i18n.getMessage("endsIn", formatter.format(n.toPrecision(2), scale))
 			break
+		}
 	}
 }
 
