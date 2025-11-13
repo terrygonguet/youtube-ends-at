@@ -9,6 +9,7 @@
 	},
 	"devDependencies": {
 		"chokidar": "^3.6.0",
-		"web-ext": "^8.2.0"
+		"web-ext": "^8.2.0",
+		"zx": "^8.8.5"
 	}
 }
