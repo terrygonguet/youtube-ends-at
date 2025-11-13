@@ -8,8 +8,8 @@
 		"build": "zx build.mjs"
 	},
 	"devDependencies": {
-		"chokidar": "^3.6.0",
-		"web-ext": "^8.2.0",
+		"chokidar": "^4.0.3",
+		"web-ext": "^9.1.0",
 		"zx": "^8.8.5"
 	}
 }
